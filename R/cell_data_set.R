@@ -65,8 +65,7 @@ setClass("cell_data_set",
 #'
 new_cell_data_set <- function(expression_data,
                               cell_metadata = NULL,
-                              gene_metadata = NULL,
-                              reducedDims = NULL) {
+                              gene_metadata = NULL) {
 
   assertthat::assert_that(class(expression_data) == "matrix" ||
                             is_sparse_matrix(expression_data),
@@ -108,7 +107,7 @@ new_cell_data_set <- function(expression_data,
   sce <- SingleCellExperiment(list(counts=methods::as(expression_data, "dgCMatrix")),
                               rowData = gene_metadata,
                               colData = cell_metadata,
-                              reducedDims = reducedDims)
+                              reducedDims = list())
 
   cds <- methods::new("cell_data_set",
              assays = SummarizedExperiment::Assays(
