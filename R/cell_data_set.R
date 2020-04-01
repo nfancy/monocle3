@@ -65,7 +65,8 @@ setClass("cell_data_set",
 #'
 new_cell_data_set <- function(expression_data,
                               cell_metadata = NULL,
-                              gene_metadata = NULL) {
+                              gene_metadata = NULL,
+                              reducedDims = NULL) {
 
   assertthat::assert_that(class(expression_data) == "matrix" ||
                             is_sparse_matrix(expression_data),
@@ -106,7 +107,8 @@ new_cell_data_set <- function(expression_data,
 
   sce <- SingleCellExperiment(list(counts=methods::as(expression_data, "dgCMatrix")),
                               rowData = gene_metadata,
-                              colData = cell_metadata)
+                              colData = cell_metadata,
+                              reducedDims = reducedDims)
 
   cds <- methods::new("cell_data_set",
              assays = SummarizedExperiment::Assays(
@@ -118,7 +120,8 @@ new_cell_data_set <- function(expression_data,
              metadata = metadata(sce),
              NAMES = NULL,
              elementMetadata = elementMetadata(sce)[,0],
-             rowRanges = rowRanges(sce))
+             rowRanges = rowRanges(sce),
+             reducedDims = reducedDims(sce))
 
   metadata(cds)$cds_version <- Biobase::package.version("monocle3")
   clusters <- stats::setNames(SimpleList(), character(0))
